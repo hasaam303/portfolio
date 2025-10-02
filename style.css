@@ -8,3 +8,31 @@ img {
   width: 150px;   /* make the image 150 pixels wide */
   height: auto;   /* keep proportions */
 }
+
+nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+nav a {
+  text-decoration: none;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav { 
+  display: block; 
+  padding: 12px; 
+  border: 2px solid red;   /* TEMP: makes nav obvious */
+  background: #fff;        /* TEMP */
+}
+nav a { 
+  margin-right: 16px; 
+  font-weight: 600; 
+  color: #111 !important;  /* TEMP: visible on any bg */
+  text-decoration: none; 
+}
+nav a:hover { text-decoration: underline; }
