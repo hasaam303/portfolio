@@ -11,6 +11,8 @@ img {
   height: auto;
 }
 
+figure { margin: 12px 0; }
+figcaption { display: block; margin-top: 6px; color: #333; }
 
 /* Top navigation */
 nav {
