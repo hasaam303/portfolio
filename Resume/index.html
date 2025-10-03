@@ -3,13 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume • Hasaam</title>
+  <title>Resume • Hasaam Butt</title>
   <link rel="stylesheet" href="../style.css" />
-  <style>
-    /* page-specific styles; optional */
-    .actions { margin: 0.5rem 0 1rem; }
-    .pdf-frame { width: 100%; height: 85vh; border: 1px solid #ddd; }
-  </style>
 </head>
 <body>
   <nav>
@@ -17,16 +12,129 @@
     <a href="../projects/">Projects</a>
     <a href="./">Resume</a>
     <a href="../contact/">Contact</a>
-    <a href="https://github.com/hasaam303" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/hasaam303" target="_blank" rel="noopener noreferrer">GitHub</a>
   </nav>
 
-  <h1>Resume</h1>
-
-  <!-- Inline preview (falls back to link if a browser can't embed PDFs) -->
-  <iframe class="pdf-frame" src="HasaamButt.pdf">
-    <p>Your browser can’t display PDFs. 
-      <a href="HasaamButt.pdf" target="_blank" rel="noopener">Click here to open it.</a>
+  <header>
+    <h1>Hasaam Butt</h1>
+    <p>
+      <a href="mailto:butthasaam05@gmail.com">butthasaam05@gmail.com</a> •
+      <a href="tel:+19512123552">951-212-3552</a> •
+      <a href="https://www.linkedin.com/in/hasaam-butt-54b147285" target="_blank" rel="noopener noreferrer">
+        linkedin.com/in/hasaam-butt-54b147285
+      </a>
     </p>
-  </iframe>
+  </header>
+
+  <main>
+    <section aria-labelledby="edu">
+      <h2 id="edu">Education</h2>
+      <article>
+        <h3>University of California, San Diego — La Jolla, CA</h3>
+        <p>
+          Halıcıoğlu Data Science Institute, <strong>B.S. in Data Science</strong> —
+          GPA: 3.6 •
+          <time datetime="2027-06">June 2027</time>
+        </p>
+      </article>
+    </section>
+
+    <section aria-labelledby="exp">
+      <h2 id="exp">Professional Experience</h2>
+
+      <article>
+        <header>
+          <h3>7–Eleven — Moreno Valley, CA</h3>
+          <p>Assistant Manager • <time datetime="2020-03">Mar 2020</time> — <time datetime="2023-08">Aug 2023</time></p>
+        </header>
+        <ul>
+          <li>Owned cash reports, weekly schedules, monthly audits, and payroll (ADP), saving 5+ staff hours/week.</li>
+          <li>Analyzed sales forecasts and item counts to plan biweekly shipments and shelf placement.</li>
+          <li>Drove targeted promos by season/weather/media; increased category sales by 25%.</li>
+        </ul>
+      </article>
+
+      <article>
+        <header>
+          <h3>StatPilot — Sports Betting Decision Platform (DataHacks @ UCSD)</h3>
+          <p>Hackathon Winner — Innovation Launchpad Award • <time datetime="2025-04">Apr 2025</time></p>
+        </header>
+        <ul>
+          <li>Built a SciPy-based weighting algorithm; achieved 65% betting accuracy on API-retrieved ESPN data.</li>
+          <li>Shipped a responsive web UI with HTML/CSS for simple, fast picks.</li>
+          <li>Added validation checks and unit tests to ensure reliable model outputs.</li>
+          <li>Presented the product on team’s behalf; selected as a winning team for innovation and execution.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="projects">
+      <h2 id="projects">Projects</h2>
+
+      <article>
+        <header>
+          <h3>League of Legends Outcome Predictor — Game Role Analysis</h3>
+          <p><em>Python, scikit-learn</em></p>
+        </header>
+        <ul>
+          <li>Ran hypothesis tests on game stats (gold, XP, damage) to quantify contribution to win probability.</li>
+          <li>Built logistic regression and random forest baselines; improved accuracy from 57% to 80% via feature engineering.</li>
+          <li>Audited model bias by comparing performance in advantaged vs. disadvantaged roles.</li>
+        </ul>
+      </article>
+
+      <article>
+        <header>
+          <h3>Mario Symbolic Music Generator</h3>
+          <p><em>PyTorch, TensorFlow</em></p>
+        </header>
+        <ul>
+          <li>Used AI-assisted tooling to accelerate debugging and make training steps reproducible.</li>
+          <li>Preprocessed MIDI into pitch-duration tensors; standardized data pipeline.</li>
+          <li>Trained a hybrid Markov + LSTM model with tuned hyperparameters using cross-entropy loss.</li>
+        </ul>
+      </article>
+
+      <article>
+        <header>
+          <h3>Parkinson’s Disease Detection</h3>
+          <p><em>Python, Pandas/NumPy, scikit-learn</em></p>
+        </header>
+        <ul>
+          <li>Explored and cleaned tabular features; standardized with StandardScaler.</li>
+          <li>Built an SVM classifier for binary prediction; evaluated with cross-validation.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="orgs">
+      <h2 id="orgs">Organizations</h2>
+      <article>
+        <header>
+          <h3>Data Science Student Society (DS3)</h3>
+          <p>Project Developer • <time datetime="2023-10">Oct 2023</time> — Present</p>
+        </header>
+        <ul>
+          <li>Created workshops and hack-related events on DS tools and techniques; supported peers with applied examples.</li>
+        </ul>
+      </article>
+
+      <article>
+        <header>
+          <h3>Associated Computing Machinery (ACM)</h3>
+          <p>Member • <time datetime="2024-01">Jan 2024</time> — Present</p>
+        </header>
+        <ul>
+          <li>Joined talks and technical discussions to deepen understanding of ML theory, optimization, and production.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section aria-labelledby="skills">
+      <h2 id="skills">Skills</h2>
+      <p><strong>Languages/Tools:</strong> Python, SQL (Postgres), Git, HTML, Excel, Java, MATLAB</p>
+      <p><strong>ML/AI:</strong> scikit-learn, TensorFlow, PyTorch; Large Language Models (GPT-5, Claude, Copilot)</p>
+    </section>
+  </main>
 </body>
 </html>
