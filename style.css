@@ -1,3 +1,10 @@
+:root{
+  --color-accent: #001F3F;     /* pick any color you like */
+  --color-accent-bg: #e8eef7;  /* a very light tint for hover background */
+}
+/* lets native controls (checkboxes, etc.) use the accent too */
+html { accent-color: var(--color-accent); }
+
 /* Base text */
 body {
   font: 100%/1.5 system-ui;
@@ -15,31 +22,41 @@ figure { margin: 12px 0; }
 figcaption { display: block; margin-top: 6px; color: #333; }
 
 /* Top navigation */
-nav {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #ddd;        /* fallback gray instead of oklch */
+nav{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:1rem;
+  text-align:center;
+  margin-bottom:1rem;
+  border-bottom:1px solid #ddd;
 }
 
-nav a {
-  display: inline-block;                /* lets padding & thick border look right */
-  text-decoration: none;
-  color: inherit;
-  padding: 0.5em 0.75em;
-  font-weight: 600;
-  border-bottom: 0 solid transparent;   /* base for active underline */
+nav a{
+  display:inline-block;            /* makes the thick underline look right */
+  text-decoration:none;
+  color:inherit;
+  padding:0.5em 0.75em;
+  font-weight:600;
+  border-bottom:0 solid transparent; /* base for active/hover underline */
 }
 
-nav a:hover { text-decoration: underline; }
+/* current page link */
+nav a.active{
+  border-bottom-width:0.4em;
+  border-bottom-color:var(--color-accent);      /* accent underline */
+  padding-bottom:calc(0.5em - 0.4em);
+}
 
-nav a.active {
-  border-bottom-width: 0.4em;           /* thick underline */
-  border-bottom-color: #bbb;            /* visible in all browsers */
-  padding-bottom: calc(0.5em - 0.4em);  /* keep same overall height */
+/* hover state uses the same thick underline + soft background */
+nav a:hover{
+  text-decoration:none;
+  border-bottom-width:0.4em;
+  border-bottom-color:var(--color-accent);
+  padding-bottom:calc(0.5em - 0.4em);
+  background:var(--color-accent-bg);
+  border-top-left-radius:6px;      /* subtle rounded corners (optional) */
+  border-top-right-radius:6px;
 }
 /* Optional: keep content nicely centered */
 body {
