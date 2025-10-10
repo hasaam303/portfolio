@@ -72,27 +72,13 @@ body {
 
 /* --- Projects Grid Layout --- */
 .projects {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
 }
 
-.projects article {
-  padding: 1rem 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.projects h2 {
-  margin-bottom: 0.3rem;
-  color: #001F3F; /* navy blue accent */
-}
-
-.projects a {
-  color: #001F3F;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.projects a:hover {
-  text-decoration: underline;
-}
+/* keep the simple, clean look */
+.projects article { padding: 0; border: 0; text-align: center; }
+.projects img { width: 100%; height: auto; max-width: 280px; margin: 0 auto 0.5rem; display: block; }
+.projects h2 { margin: 0 0 0.25rem; color: #001F3F; }
