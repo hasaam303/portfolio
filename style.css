@@ -82,3 +82,61 @@ body {
 .projects article { padding: 0; border: 0; text-align: center; }
 .projects img { width: 100%; height: auto; max-width: 280px; margin: 0 auto 0.5rem; display: block; }
 .projects h2 { margin: 0 0 0.25rem; color: #001F3F; }
+
+.resume {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #111;
+  max-width: 850px;
+  margin: 0 auto;
+  line-height: 1.5;
+  padding: 1rem;
+}
+
+.resume header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.resume header p {
+  font-size: 0.95rem;
+  color: #003366;
+}
+
+.resume header a {
+  color: #003366;
+  text-decoration: none;
+}
+
+.resume header a:hover {
+  text-decoration: underline;
+}
+
+.resume h2 {
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.resume h3 {
+  font-size: 1rem;
+  margin-bottom: 0.1rem;
+}
+
+.resume article p {
+  margin: 0.2rem 0 0.5rem;
+}
+
+.resume ul {
+  margin: 0.4rem 0 1rem 1.2rem;
+}
+
+.resume li {
+  margin-bottom: 0.3rem;
+}
+
+.resume header p a:not(:last-child)::after {
+  content: " • ";
+  color: #555;
+}
