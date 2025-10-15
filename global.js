@@ -87,3 +87,24 @@ let currentLink = navLinks.find(
   (a) => a.host === location.host && a.pathname === location.pathname
 );
 currentLink?.classList.add("current");
+
+const themeSelect = document.querySelector("#theme-switch");
+
+// Define a helper function to avoid repeating code
+function setColorScheme(scheme) {
+  document.documentElement.style.colorScheme = scheme; // actually apply it
+  localStorage.colorScheme = scheme; // save user preference
+  themeSelect.value = scheme; // sync dropdown UI
+}
+
+// When the user changes the dropdown
+themeSelect?.addEventListener("change", (e) => {
+  setColorScheme(e.target.value);
+});
+
+// When the page loads, check if a saved preference exists
+if ("colorScheme" in localStorage) {
+  setColorScheme(localStorage.colorScheme);
+} else {
+  setColorScheme("light dark"); // default (automatic)
+}
