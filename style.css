@@ -1,16 +1,13 @@
+html {
+  color-scheme: light dark;
+}
 :root{
   --color-accent: #001F3F;     /* pick any color you like */
-  --color-accent-bg: #e8eef7;  /* a very light tint for hover background */
+  --color-accent-bg: color-mix(in oklch, var(--color-accent), canvas 85%);  /* a very light tint for hover background */
 }
 /* lets native controls (checkboxes, etc.) use the accent too */
 html { accent-color: var(--color-accent); }
 
-/* Base text */
-body {
-  font: 100%/1.5 system-ui;
-  margin: 0;
-  padding: 0 16px;
-}
 
 /* Images */
 img {
@@ -22,14 +19,13 @@ figure { margin: 12px 0; }
 figcaption { display: block; margin-top: 6px; color: #333; }
 
 /* Top navigation */
-nav{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:1rem;
-  text-align:center;
-  margin-bottom:1rem;
-  border-bottom:1px solid #ddd;
+nav {
+  --border-color: oklch(50% 10% 200 / 40%);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 1rem;
+  padding: 12px 0;
+  margin-bottom: 1rem;
 }
 
 nav a{
@@ -42,10 +38,11 @@ nav a{
 }
 
 /* current page link */
-nav a.active{
+nav a.current{
   border-bottom-width:0.4em;
   border-bottom-color:var(--color-accent);      /* accent underline */
   padding-bottom:calc(0.5em - 0.4em);
+  color: inherit;
 }
 
 /* hover state uses the same thick underline + soft background */
@@ -144,4 +141,18 @@ body {
 nav a.current {
   border-bottom: 2px solid black;
   color: black;
+}
+
+.color-scheme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 80%;        /* makes it smaller and less distracting */
+  font-family: inherit;  /* keeps same font as rest of site */
+}
+
+.color-scheme select {
+  font: inherit;
+  margin-left: 0.4em;
+  padding: 0.2em 0.4em;
 }

@@ -18,6 +18,20 @@ currentLink?.classList.add("current");
 */
 
 // Define the pages for your navigation
+document.body.insertAdjacentHTML(
+  'afterbegin',
+  `
+  <label class="color-scheme">
+    Theme:
+    <select id="theme-switch">
+      <option value="light dark">Automatic</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </label>
+  `
+);
+
 let pages = [
   { url: "", title: "Home" },
   { url: "projects/", title: "Projects" },
