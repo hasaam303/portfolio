@@ -140,3 +140,8 @@ body {
   content: " • ";
   color: #555;
 }
+
+nav a.current {
+  border-bottom: 2px solid black;
+  color: black;
+}
