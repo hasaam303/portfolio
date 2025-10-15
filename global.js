@@ -47,7 +47,24 @@ for (let p of pages) {
   }
 
   // Add the link to the nav
-  nav.insertAdjacentHTML("beforeend", `<a href="${url}">${title}</a>`);
+  // nav.insertAdjacentHTML("beforeend", `<a href="${url}">${title}</a>`);
+  const a = document.createElement("a");
+  a.href = url;
+  a.textContent = title;
+
+  // Highlight the current page link
+  // (same check you used before)
+
+  // Open external links in a new tab
+  if (a.host !== location.host) {
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    // OR: a.toggleAttribute("target", true); a.setAttribute("rel","noopener noreferrer");
+  }
+
+  // Add to the nav
+  nav.append(a);
+
 }
 
 // Highlight the current page link automatically
