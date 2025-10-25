@@ -1,0 +1,62 @@
+[
+    {
+        "title": "Project One",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project uses linear regression to allow users to bet on sport points."
+    },
+    {
+        "title": "Project Two",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project uses Mario music data to create new Mario music with machine learning."
+    },
+    {
+        "title": "Project Three",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project does predictive modeling on win rate probablility."
+    },
+    {
+        "title": "Project Four",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project visualizes global temperature data using Python and Matplotlib."
+    },
+    {
+        "title": "Project Five",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project explores text classification with natural language processing."
+    },
+    {
+        "title": "Project Six",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project builds a dashboard to track live stock market data with APIs."
+    },
+    {
+        "title": "Project Seven",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project predicts housing prices using decision tree regression."
+    },
+    {
+        "title": "Project Eight",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project performs clustering analysis on social media user activity."
+    },
+    {
+        "title": "Project Nine",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project generates interactive visualizations with D3.js."
+    },
+    {
+        "title": "Project Ten",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project cleans and analyzes airline flight delay data using SQL."
+    },
+    {
+        "title": "Project Eleven",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project forecasts sales data with time series analysis in Python."
+    },
+    {
+        "title": "Project Twelve",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "This project detects anomalies in financial transactions using machine learning."
+    }
+]

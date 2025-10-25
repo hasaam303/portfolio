@@ -108,3 +108,53 @@ if ("colorScheme" in localStorage) {
 } else {
   setColorScheme("light dark"); // default (automatic)
 }
+
+export async function fetchJSON(url) {
+  try {
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching or parsing JSON data:', error);
+    return []; // fail-safe so the page still renders an empty state
+  }
+}
+
+export function renderProjects(projects, containerElement, headingLevel = 'h2') {
+  // Guards
+  if (!(containerElement instanceof Element)) {
+    console.error('renderProjects: invalid containerElement');
+    return;
+  }
+  if (!Array.isArray(projects)) projects = [];
+
+  const validHeadings = new Set(['h1','h2','h3','h4','h5','h6']);
+  if (!validHeadings.has(headingLevel)) headingLevel = 'h2';
+
+  // 2) Clear existing content to avoid duplicates
+  containerElement.innerHTML = '';
+
+  // Empty state
+  if (projects.length === 0) {
+    containerElement.innerHTML = '<p class="muted">No projects available at the moment.</p>';
+    return;
+  }
+
+  // 3–5) Create each <article>, set content, append
+  for (const p of projects) {
+    const article = document.createElement('article');
+    const title = esc(p?.title || 'Untitled project');
+    const img   = p?.image || '';
+    const desc  = esc(p?.description || '');
+
+    article.innerHTML = `
+      <${headingLevel}>${title}</${headingLevel}>
+      ${img ? `<img src="${img}" alt="${title}">` : ''}
+      ${desc ? `<p>${desc}</p>` : ''}
+    `;
+    containerElement.appendChild(article);
+  }
+}
