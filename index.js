@@ -1,4 +1,4 @@
-import { fetchJSON, renderProjects, fetchGithubData } from './global.js';
+import { fetchJSON, renderProjects} from './global.js';
 
 // 3) Fetch and filter to first 3 projects
 const projects = await fetchJSON('./lib/projects.json');
