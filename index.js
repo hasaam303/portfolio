@@ -1,4 +1,4 @@
-import { fetchJSON, renderProjects} from './global.js';
+import { fetchJSON, renderProjects, fetchGitHubData} from './global.js';
 
 // 3) Fetch and filter to first 3 projects
 const projects = await fetchJSON('./lib/projects.json');
@@ -9,3 +9,6 @@ const projectsContainer = document.querySelector('.projects');
 
 // 5) Render the latest projects
 renderProjects(latestProjects, projectsContainer, 'h2');
+
+const githubData = await fetchGitHubData('hasaam303');
+console.log(githubData);
