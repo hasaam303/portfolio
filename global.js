@@ -123,6 +123,13 @@ export async function fetchJSON(url) {
   }
 }
 
+const esc = (s) => String(s ?? '')
+.replaceAll('&','&amp;')
+.replaceAll('<','&lt;')
+.replaceAll('>','&gt;')
+.replaceAll('"','&quot;')
+.replaceAll("'",'&#39;');
+
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
   // Guards
   if (!(containerElement instanceof Element)) {
@@ -142,12 +149,6 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     containerElement.innerHTML = '<p class="muted">No projects available at the moment.</p>';
     return;
   }
-  const esc = (s) => String(s ?? '')
-  .replaceAll('&','&amp;')
-  .replaceAll('<','&lt;')
-  .replaceAll('>','&gt;')
-  .replaceAll('"','&quot;')
-  .replaceAll("'",'&#39;');
   // 3–5) Create each <article>, set content, append
   for (const p of projects) {
     const article = document.createElement('article');
