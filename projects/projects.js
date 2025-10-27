@@ -18,7 +18,7 @@ const data = rolledData.map(([year, count]) => ({ value: count, label: String(ye
 
 // 3) Generators and scales
 const sliceGenerator = d3.pie().value(d => d.value);
-const arcGenerator   = d3.arc().innerRadius(0).outerRadius(50);
+const arcGenerator   = d3.arc().innerRadius(0).outerRadius(30);
 const colors         = d3.scaleOrdinal(d3.schemeTableau10);
 
 // 4) Draw pie
