@@ -195,3 +195,31 @@ ul.legend {
   border-radius: 0.25em; /* use 50% for circles */
   flex: 0 0 auto;
 }
+
+/* --- Pie + Legend side-by-side --- */
+.container {
+  display: flex;
+  align-items: flex-start;   /* top-align */
+  gap: 2rem;                 /* space between pie and legend */
+  margin-block: 1rem 2rem;
+}
+
+/* Size the pie so the legend can sit on the right */
+#projects-plot {
+  flex: 0 0 16rem;           /* reserve 16rem width for the pie */
+  max-width: 16rem;
+  height: auto;
+  overflow: visible;
+}
+
+/* Let legend take the remaining width */
+ul.legend {
+  flex: 1;                   /* <-- add this to your existing legend rules */
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+}
+
+/* Stack vertically on small screens */
+@media (max-width: 700px) {
+  .container { flex-direction: column; }
+  #projects-plot { flex: none; max-width: 100%; }
+}
