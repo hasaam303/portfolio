@@ -8,88 +8,60 @@ const titleElement = document.querySelector('.projects-title');
 if (titleElement) {
     titleElement.textContent = `${projects.length} Projects`;
   }
-const rolledData = d3.rollups(
-  projects,
-  v => v.length,       // count per bucket
-  d => d.year ?? 'Unknown'
-);
-// Convert to the shape the pie expects
-const data = rolledData.map(([year, count]) => ({ value: count, label: String(year) }));
-
-// 3) Generators and scales
-const sliceGenerator = d3.pie().value(d => d.value);
-const arcGenerator   = d3.arc().innerRadius(0).outerRadius(35);
-const colors         = d3.scaleOrdinal(d3.schemeTableau10);
-
-// 4) Draw pie
-const svg = d3.select('#projects-plot');
-svg.selectAll('*').remove(); // clear previous drawings on reload
-
-svg
-  .selectAll('path')
-  .data(sliceGenerator(data))
-  .join('path')
-  .attr('d', arcGenerator)
-  .attr('fill', (d, i) => colors(i));
-
-// ====== LEGEND ======
-const legend = d3.select('.legend');
-legend.selectAll('*').remove();
-
-legend
-  .selectAll('li')
-  .data(data)
-  .join('li')
-  .attr('class', 'legend-item')
-  .attr('style', (d, i) => `--color:${colors(i)}`)
-  .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
-
-let query = '';
-const searchInput = document.querySelector('.searchBar');
-
-searchInput.addEventListener('input', (event) => {
-  // Update query value
-  query = event.target.value.toLowerCase();
-
-  // Filter across all project fields (title, description, year, etc.)
-  const filteredProjects = projects.filter((project) => {
-    let values = Object.values(project).join('\n').toLowerCase();
-    return values.includes(query);
-  });
-
-  // Render filtered projects
-  renderProjects(filteredProjects, projectsContainer, 'h2');
-
-  // ====== Update Pie Chart ======
-  const rolledData = d3.rollups(filteredProjects, (v) => v.length, (d) => d.year);
-  const data = rolledData.map(([year, count]) => ({ value: count, label: year }));
-
-  const sliceGenerator = d3.pie().value((d) => d.value);
-  const arcData = sliceGenerator(data);
-
-  const colors = d3.scaleOrdinal(d3.schemeTableau10);
-  const arcGenerator = d3.arc().innerRadius(0).outerRadius(35);
-
-  // Clear old chart
-  d3.select('#projects-plot').selectAll('*').remove();
-
-  // Draw updated slices
-  d3.select('#projects-plot')
-    .selectAll('path')
-    .data(arcData)
-    .join('path')
-    .attr('d', arcGenerator)
-    .attr('fill', (d, i) => colors(i));
-
-  // Update legend
+function renderPieChart(projectsGiven) {
+  const svg    = d3.select('#projects-plot');
   const legend = d3.select('.legend');
+
+  // a) clear previous drawing to avoid duplicates
+  svg.selectAll('*').remove();
   legend.selectAll('*').remove();
 
-  legend
-    .selectAll('li')
+  // b) roll up counts by year -> [{label, value}]
+  const rolled = d3.rollups(projectsGiven, v => v.length, d => String(d.year ?? 'Unknown'));
+  const data   = rolled.map(([year, count]) => ({ label: year, value: count }));
+
+  // If nothing to show, stop here
+  if (data.length === 0) return;
+
+  // c) generators/scales
+  const pie   = d3.pie().value(d => d.value);
+  const arcs  = pie(data);
+  const arc   = d3.arc().innerRadius(0).outerRadius(35); // adjust radius to taste
+  const color = d3.scaleOrdinal(d3.schemeTableau10);
+
+  // d) draw slices
+  svg.selectAll('path')
+    .data(arcs)
+    .join('path')
+    .attr('d', arc)
+    .attr('fill', (d, i) => color(i));
+
+  // e) draw legend
+  legend.selectAll('li')
     .data(data)
     .join('li')
     .attr('class', 'legend-item')
-    .attr('style', (d, i) => `--color:${colors(i)}`)
-    .html((d) => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+    .attr('style', (d, i) => `--color:${color(i)}`)
+    .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+}
+
+// 2) Initial render on page load
+renderPieChart(projects);
+
+// 3) Search: filter visible projects and re-render both list + pie
+let query = '';
+const searchInput = document.querySelector('.searchBar');
+
+function setQuery(q) {
+  query = String(q ?? '').toLowerCase();
+  return projects.filter(p =>
+    Object.values(p).join('\n').toLowerCase().includes(query)
+  );
+}
+
+// Use 'change' per the instructions; switch to 'input' if you want live typing
+searchInput?.addEventListener('change', (event) => {
+  const filtered = setQuery(event.target.value);
+  renderProjects(filtered, projectsContainer, 'h2');
+  renderPieChart(filtered);
 });
