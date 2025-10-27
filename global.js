@@ -156,11 +156,14 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
     const img   = p?.image || '';
     const desc  = esc(p?.description || '');
 
-    article.innerHTML = `
-      <${headingLevel}>${title}</${headingLevel}>
-      ${img ? `<img src="${img}" alt="${title}">` : ''}
+  article.innerHTML = `
+    <${headingLevel}>${title}</${headingLevel}>
+    ${img ? `<img src="${img}" alt="${title}">` : ''}
+    <div>
       ${desc ? `<p>${desc}</p>` : ''}
-    `;
+      ${p.year ? `<p class="project-year">c. ${p.year}</p>` : ''}
+    </div>
+  `;
     containerElement.appendChild(article);
   }
 }
