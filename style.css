@@ -223,3 +223,22 @@ ul.legend {
   .container { flex-direction: column; }
   #projects-plot { flex: none; max-width: 100%; }
 }
+#projects-plot path {
+  cursor: pointer;       /* Step 5.2: clickable wedges */
+  transition: 300ms;     /* Step 5.1: smooth animation */
+}
+
+/* Step 5.1: fade other wedges on hover */
+#projects-plot:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
+/* Step 5.2: Selected wedge and legend item */
+.selected {
+  --color: oklch(60% 45% 0) !important; /* highlight color override */
+}
+
+/* If the selected element is a PATH, use that color for fill */
+.selected:is(path) {
+  fill: var(--color);
+}

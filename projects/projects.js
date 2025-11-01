@@ -3,6 +3,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 const projects = await fetchJSON('../lib/projects.json');
 const projectsContainer = document.querySelector('.projects');
+let selectedIndex = -1; // -1 means “no selection”
 renderProjects(projects, projectsContainer, 'h2');
 const titleElement = document.querySelector('.projects-title');
 if (titleElement) {
@@ -65,3 +66,60 @@ searchInput?.addEventListener('change', (event) => {
   renderProjects(filtered, projectsContainer, 'h2');
   renderPieChart(filtered);
 });
+
+function renderPieChart(projectsGiven) {
+  const svg    = d3.select('#projects-plot');
+  const legend = d3.select('.legend');
+
+  // Clear previous drawing
+  svg.selectAll('*').remove();
+  legend.selectAll('*').remove();
+
+  // Roll up counts by year -> [{label, value}]
+  const rolled = d3.rollups(projectsGiven, v => v.length, d => String(d.year ?? 'Unknown'));
+  const data   = rolled.map(([year, count]) => ({ label: year, value: count }));
+
+  if (data.length === 0) return; // nothing to draw
+
+  // Generators & scales
+  const pie   = d3.pie().value(d => d.value);
+  const arcs  = pie(data);
+  const arc   = d3.arc().innerRadius(0).outerRadius(35); // adjust size as you like
+  const color = d3.scaleOrdinal(d3.schemeTableau10);
+
+  // Draw wedges
+  svg.selectAll('path')
+    .data(arcs)
+    .join('path')
+      .attr('d', arc)
+      .attr('fill', (d, i) => color(i))
+      .attr('class', (d, i) => (i === selectedIndex ? 'selected' : null))
+      .on('click', (_, d) => {
+        const i = arcs.indexOf(d);
+        selectedIndex = (selectedIndex === i) ? -1 : i;
+
+        // Update classes on wedges & legend
+        svg.selectAll('path')
+          .attr('class', (d2, idx) => (idx === selectedIndex ? 'selected' : null));
+        legend.selectAll('li')
+          .attr('class', (d2, idx) => `legend-item${idx === selectedIndex ? ' selected' : ''}`);
+      });
+
+  // Draw legend
+  legend.selectAll('li')
+    .data(data)
+    .join('li')
+      .attr('class', (d, i) => `legend-item${i === selectedIndex ? ' selected' : ''}`)
+      .attr('style', (d, i) => `--color:${color(i)}`)
+      .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
+      .on('click', (_, d) => {
+        const i = data.indexOf(d);
+        selectedIndex = (selectedIndex === i) ? -1 : i;
+
+        // Sync classes
+        legend.selectAll('li')
+          .attr('class', (d2, idx) => `legend-item${idx === selectedIndex ? ' selected' : ''}`);
+        svg.selectAll('path')
+          .attr('class', (d2, idx) => (idx === selectedIndex ? 'selected' : null));
+      });
+}
