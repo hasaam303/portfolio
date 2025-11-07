@@ -236,41 +236,45 @@ function renderScatterPlot(data, commits) {
     .call(yAxis);
   const [minLines, maxLines] = d3.extent(commits, d => d.totalLines);
 
-// Radius scale mapping lines edited → circle size
+  // Radius scale mapping lines edited → circle size
   const rScale = d3.scaleSqrt()
     .domain([minLines, maxLines])
     .range([2, 30]);
 
+  // --- Step 5: Brush (attach ONCE, limited to plot area) ---
+  const brush = d3.brush()
+    .extent([[usableArea.left, usableArea.top], [usableArea.right, usableArea.bottom]])
+    .on('start brush end', brushed);
+
+  const brushG = svg.append('g').attr('class', 'brush').call(brush);
+
+  // Data order: draw large first, small last so small remain hoverable
   const sortedCommits = d3.sort(commits, d => -d.totalLines);
 
+  // Dots + tooltip events (draw AFTER brush so dots sit above overlay)
+  const dotsG = svg.append('g').attr('class', 'dots');
 
-  // Dots + tooltip events
-  svg.append('g')
-    .attr('class', 'dots')
-    .selectAll('circle')
+  dotsG.selectAll('circle')
     .data(sortedCommits)
     .join('circle')
-        .attr('cx', d => xScale(d.datetime))
-        .attr('cy', d => yScale(d.hourFrac))
-        .attr('r', d => rScale(d.totalLines))   // using your scaleSqrt from 4.2
-        .attr('fill', 'steelblue')
-        .style('fill-opacity', 0.7)
-        .on('mouseenter', (event, commit) => {
+      .attr('cx', d => xScale(d.datetime))
+      .attr('cy', d => yScale(d.hourFrac))
+      .attr('r', d => rScale(d.totalLines))
+      .attr('fill', 'steelblue')
+      .style('fill-opacity', 0.7)
+      .on('mouseenter', (event, commit) => {
         d3.select(event.currentTarget).style('fill-opacity', 1);
         renderTooltipContent(commit);
         updateTooltipVisibility(true);
         updateTooltipPosition(event);
-        })
-        .on('mouseleave', (event) => {
+      })
+      .on('mouseleave', (event) => {
         d3.select(event.currentTarget).style('fill-opacity', 0.7);
         updateTooltipVisibility(false);
+      });
 
-  createBrushSelector(svg);
-
-    // Step 5.2: bring dots above the brush overlay so hover works again
-  svg.call(d3.brush().on('start brush end', brushed));
-  svg.selectAll('.dots, .overlay ~ *').raise();
-    });
+  // Keep brush overlay behind dots so hover works
+  brushG.lower();
 }
 
 renderScatterPlot(data, commits);
