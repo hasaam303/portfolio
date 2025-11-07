@@ -111,6 +111,12 @@ function updateTooltipVisibility(isVisible) {
   tooltip.hidden = !isVisible;
 }
 
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById('commit-tooltip');
+  tooltip.style.left = `${event.clientX}px`;
+  tooltip.style.top = `${event.clientY}px`;
+}
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -156,21 +162,35 @@ function renderScatterPlot(data, commits) {
   svg.append('g')
     .attr('transform', `translate(${usableArea.left}, 0)`)
     .call(yAxis);
+  const [minLines, maxLines] = d3.extent(commits, d => d.totalLines);
+
+// Radius scale mapping lines edited → circle size
+  const rScale = d3.scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([2, 30]);
+
+  const sortedCommits = d3.sort(commits, d => -d.totalLines);
+
 
   // Dots + tooltip events
   svg.append('g')
+    .attr('class', 'dots')
     .selectAll('circle')
-    .data(commits)
+    .data(sortedCommits)
     .join('circle')
-    .attr('cx', d => xScale(d.datetime))
-    .attr('cy', d => yScale(d.hourFrac))
-    .attr('r', 5)
-    .attr('fill', 'steelblue')
-    .on('mouseenter', (event, commit) => {
+        .attr('cx', d => xScale(d.datetime))
+        .attr('cy', d => yScale(d.hourFrac))
+        .attr('r', d => rScale(d.totalLines))   // using your scaleSqrt from 4.2
+        .attr('fill', 'steelblue')
+        .style('fill-opacity', 0.7)
+        .on('mouseenter', (event, commit) => {
+        d3.select(event.currentTarget).style('fill-opacity', 1);
         renderTooltipContent(commit);
         updateTooltipVisibility(true);
-    })
-    .on('mouseleave', () => {
+        updateTooltipPosition(event);
+        })
+        .on('mouseleave', (event) => {
+        d3.select(event.currentTarget).style('fill-opacity', 0.7);
         updateTooltipVisibility(false);
     });
 }
