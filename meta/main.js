@@ -1,5 +1,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 // start of lab 5
+let xScale;
+let yScale;
 async function loadData() {
   // Load and convert numeric/date fields
   const data = await d3.csv('loc.csv', (row) => ({
@@ -117,6 +119,76 @@ function updateTooltipPosition(event) {
   tooltip.style.top = `${event.clientY}px`;
 }
 
+function createBrushSelector(svg) {
+  svg.call(d3.brush()); // you can drag a rectangle now
+}
+
+function isCommitSelected(selection, commit) {
+  if (!selection) return false; // nothing selected
+  const [[x0, y0], [x1, y1]] = selection;   // top-left & bottom-right in SVG coords
+  const x = xScale(commit.datetime);        // commit → SVG x
+  const y = yScale(commit.hourFrac);        // commit → SVG y
+  return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+}
+
+function brushed(event) {
+  const selection = event.selection; // null when cleared
+  d3.selectAll('.dots circle')
+    .classed('selected', d => isCommitSelected(selection, d));
+  
+  renderSelectionCount(selection);
+  renderLanguageBreakdown(selection);
+}
+
+function renderSelectionCount(selection) {
+  const selectedCommits = selection
+    ? commits.filter(d => isCommitSelected(selection, d))
+    : [];
+
+  const countElement = document.getElementById('selection-count');
+  countElement.textContent = `${selectedCommits.length || 'No'} commits selected`;
+
+  return selectedCommits; // optional, useful if you want to reuse
+}
+
+function renderLanguageBreakdown(selection) {
+  const selectedCommits = selection
+    ? commits.filter(d => isCommitSelected(selection, d))
+    : [];
+
+  const container = document.getElementById('language-breakdown');
+
+  if (selectedCommits.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Use selected commits; fall back to all commits if needed
+  const requiredCommits = selectedCommits.length ? selectedCommits : commits;
+
+  // Flatten all line objects for those commits
+  const lines = requiredCommits.flatMap(d => d.lines);
+
+  // Count lines by language (the CSV field is "type")
+  const breakdown = d3.rollup(
+    lines,
+    v => v.length,   // count of lines in this language
+    d => d.type      // language key
+  );
+
+  // Update the DOM
+  container.innerHTML = '';
+  for (const [language, count] of breakdown) {
+    const proportion = count / lines.length;
+    const formatted = d3.format('.1~%')(proportion);
+
+    container.innerHTML += `
+      <dt>${language}</dt>
+      <dd>${count} lines (${formatted})</dd>
+    `;
+  }
+}
+
 function renderScatterPlot(data, commits) {
   const width = 1000;
   const height = 600;
@@ -136,12 +208,12 @@ function renderScatterPlot(data, commits) {
     .attr('viewBox', `0 0 ${width} ${height}`)
     .style('overflow', 'visible');
 
-  const xScale = d3.scaleTime()
+  xScale = d3.scaleTime()
     .domain(d3.extent(commits, d => d.datetime))
     .range([usableArea.left, usableArea.right])
     .nice();
 
-  const yScale = d3.scaleLinear()
+  yScale = d3.scaleLinear()
     .domain([0, 24])
     .range([usableArea.bottom, usableArea.top]);
 
@@ -192,6 +264,12 @@ function renderScatterPlot(data, commits) {
         .on('mouseleave', (event) => {
         d3.select(event.currentTarget).style('fill-opacity', 0.7);
         updateTooltipVisibility(false);
+
+  createBrushSelector(svg);
+
+    // Step 5.2: bring dots above the brush overlay so hover works again
+  svg.call(d3.brush().on('start brush end', brushed));
+  svg.selectAll('.dots, .overlay ~ *').raise();
     });
 }
 
