@@ -335,3 +335,15 @@ circle.selected {
   fill: #ff6b6b;
   .selection { fill-opacity: 0.1; }
 }
+
+.commit-filter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commit-filter time#commit-time {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}

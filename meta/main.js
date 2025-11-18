@@ -48,6 +48,33 @@ function processCommits(data) {
 let data = await loadData();
 let commits = processCommits(data);
 
+let commitProgress = 100;
+
+const timeScale = d3
+  .scaleTime()
+  .domain(d3.extent(commits, d => d.datetime))
+  .range([0, 100]);
+
+let commitMaxTime = timeScale.invert(commitProgress);
+
+
+function onTimeSliderChange() {
+  const slider = document.getElementById('commit-progress');
+  const timeEl = document.getElementById('commit-time');
+
+  commitProgress = +slider.value;
+  commitMaxTime = timeScale.invert(commitProgress);
+
+  timeEl.textContent = commitMaxTime.toLocaleString('en', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
+}
+
+// Attach listener and initialize once
+const timeSlider = document.getElementById('commit-progress');
+timeSlider.addEventListener('input', onTimeSliderChange);
+onTimeSliderChange();
 
 function renderCommitInfo(data, commits) {
   const dl = d3.select('#stats').append('dl').attr('class', 'stats');
@@ -98,6 +125,7 @@ function renderCommitInfo(data, commits) {
 function renderTooltipContent(commit) {
   const link = document.getElementById('commit-link');
   const date = document.getElementById('commit-date');
+  const time = document.getElementById('commit-time-tooltip');
 
   if (Object.keys(commit).length === 0) return;
 
@@ -105,6 +133,9 @@ function renderTooltipContent(commit) {
   link.textContent = commit.id;
   date.textContent = commit.datetime?.toLocaleString('en', {
     dateStyle: 'full',
+  });
+  time.textContent = commit.datetime?.toLocaleTimeString('en', {
+    timeStyle: 'short',
   });
 }
 
@@ -273,8 +304,7 @@ function renderScatterPlot(data, commits) {
         updateTooltipVisibility(false);
       });
 
-  // Keep brush overlay behind dots so hover works
-  brushG.lower();
 }
 
+renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
