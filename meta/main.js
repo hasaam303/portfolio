@@ -414,12 +414,24 @@ function updateFileDisplay(filteredCommits) {
     .join(
       (enter) =>
         enter.append('div').call((div) => {
-          div.append('dt').append('code');
+          div.append('dt');
           div.append('dd');
         }),
     );
 
-  // Update text for each file
-  filesContainer.select('dt > code').text((d) => d.name);
-  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+  // dt: show filename + total lines as a small label
+  filesContainer
+    .select('dt')
+    .html((d) => `
+      <code>${d.name}</code>
+      <small>${d.lines.length} lines</small>
+    `);
+
+  // dd: one .loc div per line
+  filesContainer
+    .select('dd')
+    .selectAll('div')
+    .data((d) => d.lines)
+    .join('div')
+    .attr('class', 'loc');
 }
