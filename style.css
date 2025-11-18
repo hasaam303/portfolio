@@ -347,3 +347,31 @@ circle.selected {
   margin-left: auto;
   font-variant-numeric: tabular-nums;
 }
+
+#chart svg circle {
+  transition: all 200ms;
+
+  @starting-style {
+    r: 0;
+  }
+}
+
+#files {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 0.25rem 1rem; /* optional, just for breathing room */
+
+  > div {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+
+  dt {
+    grid-column: 1;
+  }
+
+  dd {
+    grid-column: 2;
+  }
+}

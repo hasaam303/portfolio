@@ -74,7 +74,6 @@ function onTimeSliderChange() {
   commitProgress = +slider.value;
   commitMaxTime = timeScale.invert(commitProgress);
 
-  // update display
   timeEl.textContent = commitMaxTime.toLocaleString('en', {
     dateStyle: 'long',
     timeStyle: 'short',
@@ -83,8 +82,9 @@ function onTimeSliderChange() {
   // update filtered commits
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
 
-  // update scatter plot with filtered commits
+  // update scatter plot + files section
   updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
 }
 
 // ---------- Stats + tooltip helpers ----------
@@ -395,4 +395,31 @@ renderScatterPlot(data, commits);
 // hook the slider AFTER initial plot exists
 const timeSlider = document.getElementById('commit-progress');
 timeSlider.addEventListener('input', onTimeSliderChange);
-onTimeSliderChange();
+onTimeSliderChange(); 
+
+function updateFileDisplay(filteredCommits) {
+  // Flatten all lines from the current set of commits
+  const lines = filteredCommits.flatMap((d) => d.lines);
+
+  // Group lines by file name
+  const files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => ({ name, lines }));
+
+  // Bind data to <div> children of #files, keyed by file name
+  const filesContainer = d3
+    .select('#files')
+    .selectAll('div')
+    .data(files, (d) => d.name)
+    .join(
+      (enter) =>
+        enter.append('div').call((div) => {
+          div.append('dt').append('code');
+          div.append('dd');
+        }),
+    );
+
+  // Update text for each file
+  filesContainer.select('dt > code').text((d) => d.name);
+  filesContainer.select('dd').text((d) => `${d.lines.length} lines`);
+}
