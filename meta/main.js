@@ -3,6 +3,8 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 // start of lab 5
 let xScale;
 let yScale;
+let colors = d3.scaleOrdinal(d3.schemeTableau10);
+
 
 async function loadData() {
   // Load and convert numeric/date fields
@@ -404,7 +406,8 @@ function updateFileDisplay(filteredCommits) {
   // Group lines by file name
   const files = d3
     .groups(lines, (d) => d.file)
-    .map(([name, lines]) => ({ name, lines }));
+    .map(([name, lines]) => ({ name, lines }))
+    .sort((a, b) => b.lines.length - a.lines.length);
 
   // Bind data to <div> children of #files, keyed by file name
   const filesContainer = d3
@@ -433,5 +436,6 @@ function updateFileDisplay(filteredCommits) {
     .selectAll('div')
     .data((d) => d.lines)
     .join('div')
-    .attr('class', 'loc');
+    .attr('class', 'loc')
+    .attr('style', (line) => `--color: ${colors(line.type)}`);
 }
