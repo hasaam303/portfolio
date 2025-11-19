@@ -10,45 +10,68 @@
   <main>
     <h1>Meta</h1>
     <p>This page includes stats about the code of this website.</p>
-	<div class="commit-filter">
-		<label for="commit-progress">
-		Show commits until:
-		<input
-			type="range"
-			id="commit-progress"
-			min="0"
-			max="100"
-			value="100"
-		/>
-		</label>
-		<time id="commit-time"></time>
-  	</div>
-		<dl id="files"></dl>
-		<div id="stats"></div>
-		<h2>Commits by time of day</h2>
-		<div id="chart"></div>
-		<p id="selection-count">No commits selected</p>
 
-		<dl id="language-breakdown" class="stats"></dl>
-		<dl id="commit-tooltip" class="info tooltip" hidden>
-			<dt>Commit</dt>
-			<dd><a href="" id="commit-link" target="_blank" rel="noopener noreferrer"></a></dd>
+    <div class="commit-filter">
+      <label for="commit-progress">
+        Show commits until:
+        <input
+          type="range"
+          id="commit-progress"
+          min="0"
+          max="100"
+          value="100"
+        />
+      </label>
+      <time id="commit-time"></time>
+    </div>
 
-			<dt>Date</dt>
-			<dd id="commit-date"></dd>
+    <div id="scrolly-1">
+      <div id="scatter-story">
+        <p>some filler text here</p>
+      </div>
 
-			<dt>Time</dt>
-			<dd id="commit-time-tooltip"></dd>
+      <div id="scatter-plot">
+        <div id="stats"></div>
 
-			<dt>Author</dt>
-			<dd id="commit-author"></dd>
+        <h2>Commits by time of day</h2>
+        <div id="chart"></div>
+        <p id="selection-count">No commits selected</p>
 
-			<dt>Lines edited</dt>
-			<dd id="commit-lines"></dd>
-		</dl>  
-	</main>
+        <dl id="language-breakdown" class="stats"></dl>
+
+        <dl id="commit-tooltip" class="info tooltip" hidden>
+          <dt>Commit</dt>
+          <dd>
+            <a
+              href=""
+              id="commit-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            ></a>
+          </dd>
+
+          <dt>Date</dt>
+          <dd id="commit-date"></dd>
+
+          <dt>Time</dt>
+          <dd id="commit-time-tooltip"></dd>
+
+          <dt>Author</dt>
+          <dd id="commit-author"></dd>
+
+          <dt>Lines edited</dt>
+          <dd id="commit-lines"></dd>
+        </dl>
+      </div> <!-- end #scatter-plot -->
+    </div>   <!-- end #scrolly-1 -->
+  </main>
+
+  <!-- file unit visualization goes after main -->
+  <dl id="files"></dl>
+
   <script type="module" src="../global.js"></script>
-  <script type="module" src="./index.js"></script>
+  <!-- REMOVE index.js, we don't use it anymore -->
+  <!-- <script type="module" src="./index.js"></script> -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>
