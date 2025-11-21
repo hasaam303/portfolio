@@ -395,10 +395,12 @@ circle.selected {
   position: relative;
   display: flex;
   gap: 1rem;
+  align-items: flex-start;      /* important so columns align at the top */
+  margin-top: 1.5rem;           /* optional, just spacing */
+}
 
-  > * {
-    flex: 1;
-  }
+#scrolly-1 > * {
+  flex: 1;
 }
 
 #scatter-story {
@@ -408,7 +410,7 @@ circle.selected {
 #scatter-plot {
   position: sticky;
   top: 0;
-  left: 0;
-  bottom: auto;
-  height: 50vh;
+  height: 60vh;  /* or whatever fits your chart */
+  background: white;
+  z-index: 1;
 }

@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 // start of lab 5
 let xScale;
@@ -38,7 +39,6 @@ function processCommits(data) {
         totalLines: lines.length,
       };
 
-      // Hide raw lines but keep them accessible for later use
       Object.defineProperty(ret, 'lines', {
         value: lines,
         writable: false,
@@ -47,7 +47,8 @@ function processCommits(data) {
       });
 
       return ret;
-    });
+    })
+    .sort((a, b) => a.datetime - b.datetime);  // 👈 new line
 }
 
 let data = await loadData();
@@ -439,3 +440,63 @@ function updateFileDisplay(filteredCommits) {
     .attr('class', 'loc')
     .attr('style', (line) => `--color: ${colors(line.type)}`);
 }
+
+d3.select('#scatter-story')
+  .selectAll('.step')
+  .data(commits)
+  .join('div')
+  .attr('class', 'step')
+  .html((d, i) => `
+    On ${d.datetime.toLocaleString('en', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+    })},
+    I made <a href="${d.url}" target="_blank" rel="noopener noreferrer">
+      ${i > 0 ? 'another glorious commit' : 'my first commit, and it was glorious'}
+    </a>.
+    I edited ${d.totalLines} lines across ${
+      d3.rollups(
+        d.lines,
+        D => D.length,
+        line => line.file
+      ).length
+    } files.
+    Then I looked over all I had made, and I saw that it was very good.
+  `);
+
+  function onStepEnter(response) {
+  const commit = response.element.__data__;   // D3 data bound to this .step
+  const date = commit.datetime;
+
+  // 1) update global commitMaxTime + commitProgress
+  commitMaxTime = date;
+  commitProgress = timeScale(commitMaxTime);
+
+  // 2) sync the slider + time label to this commit
+  const slider = document.getElementById('commit-progress');
+  const timeEl = document.getElementById('commit-time');
+
+  slider.value = commitProgress;
+  timeEl.textContent = commitMaxTime.toLocaleString('en', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
+
+  // 3) recompute filtered commits up to this commit
+  filteredCommits = commits.filter(d => d.datetime <= commitMaxTime);
+
+  // 4) update visualizations
+  updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
+}
+
+// create and configure the scroller
+const scroller = scrollama();
+
+scroller
+  .setup({
+    container: '#scrolly-1',
+    step: '#scrolly-1 .step',
+  })
+  .onStepEnter(onStepEnter);
+  
